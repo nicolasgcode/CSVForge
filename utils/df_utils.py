@@ -5,6 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = BASE_DIR / "data"
 CLEANED_DIR = DATA_DIR / "cleaned"
+PROCESSED_DIR = DATA_DIR / "processed"
 
 
 def get_dir(stage: str) -> Path:
