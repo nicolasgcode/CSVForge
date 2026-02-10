@@ -14,7 +14,7 @@ A minimalist and modular Python toolkit for cleaning, normalizing, and standardi
 
 ```bash
 # 1. Clone and enter the project
-git clone [https://github.com/](https://github.com/)<your-username>/CSVForge.git
+git clone [https://github.com/](https://github.com/)nicolasgcode/CSVForge.git
 cd CSVForge
 
 # 2. Setup virtual environment
