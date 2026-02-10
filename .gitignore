@@ -1,0 +1,28 @@
+# Entornos virtuales (NUNCA subirlos)
+venv/
+.venv/
+env/
+ENV/
+
+# Archivos de compilación y caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Ignorar todo el contenido de las carpetas de datos
+data/raw/*
+data/cleaned/*
+data/processed/*
+
+# EXCEPCIÓN: No ignorar los archivos .gitkeep
+!data/**/.gitkeep
+# IDEs
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
