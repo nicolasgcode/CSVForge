@@ -2,6 +2,12 @@
 
 A minimalist and modular Python toolkit for cleaning, normalizing, and standardizing CSV datasets, built to be data-agnostic, making it suitable for any tabular data workflow.
 
+---
+
+> **Note:** This project is actively evolving towards a fully automated, command-line driven engine for any tabular data format.
+
+---
+
 ## Core Features
 
 - **Data Separation:** Effortlessly split active records from deleted ones based on status fields.
@@ -14,7 +20,7 @@ A minimalist and modular Python toolkit for cleaning, normalizing, and standardi
 
 ```bash
 # 1. Clone and enter the project
-git clone [https://github.com/](https://github.com/)nicolasgcode/CSVForge.git
+git clone [https://github.com/nicolasgcode/CSVForge.git](https://github.com/nicolasgcode/CSVForge.git)
 cd CSVForge
 
 # 2. Setup virtual environment
