@@ -1,6 +1,6 @@
 # CSVForge
 
-A minimalist and modular Python toolkit for cleaning, normalizing, and standardizing CSV datasets. Originally designed for healthcare data integration, **CSVForge** is built to be data-agnostic, making it suitable for any tabular data workflow.
+A minimalist and modular Python toolkit for cleaning, normalizing, and standardizing CSV datasets, built to be data-agnostic, making it suitable for any tabular data workflow.
 
 ## Core Features
 
