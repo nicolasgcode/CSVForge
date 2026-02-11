@@ -42,7 +42,7 @@ def standarize_column_names(
 def split_by_status(df: pd.DataFrame) -> pd.DataFrame:
     # separar eliminados
     if "eliminado" in df.columns:
-        eliminado = df["eliminado"].astype(str).str.lower() == "true"
+        eliminado = df["eliminado"].astype(str).str.lower() == "1"
         df_eliminados = df[eliminado].copy()
         df_activos = df[~eliminado].copy()
     else:
@@ -81,3 +81,129 @@ def group_by_field(df: pd.DataFrame, field: str) -> pd.DataFrame:
     df_master = df_master.drop(columns=["prioridad_origen"])
 
     return df_master
+
+
+def normalizator(
+    df: pd.DataFrame,
+    path,
+    schema: dict,
+    output_name: str,
+    field_to_rename: str = None,
+    new_field_name: str = None,
+):
+    df_cleaned = df.copy()
+
+    # 1. Renombrado CRÍTICO (Asegurar que masterInst pase a ser master)
+    if field_to_rename and new_field_name:
+        if field_to_rename in df_cleaned.columns:
+            df_cleaned = df_cleaned.rename(columns={field_to_rename: new_field_name})
+        else:
+            print(f"⚠️ Advertencia: No se encontró la columna {field_to_rename}")
+
+    # 2. Columnas de auditoría
+    for col in ["cambio", "createdAt"]:
+        if col not in df_cleaned.columns:
+            df_cleaned[col] = None
+
+    # 3. Aplicar Schema (Crear columnas faltantes como NaN, NO como 0 todavía)
+    target_order = schema.get("order")
+    for col in target_order:
+        if col not in df_cleaned.columns:
+            df_cleaned[col] = None
+
+    # 4. Tipificación Inteligente
+    type_map = schema.get("types", {})
+    for col, t_type in type_map.items():
+        if col in df_cleaned.columns:
+            if t_type == "bool":
+                # Mapeamos cualquier variante a 1 y 0
+                df_cleaned[col] = (
+                    df_cleaned[col]
+                    .map(
+                        {
+                            "True": 1,
+                            "False": 0,
+                            True: 1,
+                            False: 0,
+                            "1": 1,
+                            "0": 0,
+                            1: 1,
+                            0: 0,
+                        }
+                    )
+                    .fillna(0)
+                    .astype(int)
+                )
+
+            elif t_type == "int":
+                # Convertimos a numérico permitiendo NaNs (que luego serán NULL en el CSV)
+                df_cleaned[col] = pd.to_numeric(df_cleaned[col], errors="coerce")
+                df_cleaned[col] = df_cleaned[col].astype("Int64")
+
+            # AGREGAR ESTO:
+            elif t_type == "datetime":
+                # Convertimos a datetime de pandas y luego a string en formato MySQL
+                df_cleaned[col] = pd.to_datetime(df_cleaned[col], errors="coerce")
+                # Lo pasamos a formato YYYY-MM-DD HH:MM:SS o None si es inválido
+                df_cleaned[col] = df_cleaned[col].dt.strftime("%Y-%m-%d %H:%M:%S")
+
+    # 5. Reordenar
+    df_final = df_cleaned[target_order]
+
+    # 5. Reordenar
+    df_final = df_cleaned[target_order]
+
+    # 6. Separar y Exportar
+    df_activos, df_eliminados = split_by_status(df_final)
+
+    # El secreto para MySQL está en 'na_rep'
+    # Usamos '0' para que los campos INT vacíos no queden como ''
+    df_activos.to_csv(path / f"{output_name}.csv", index=False, na_rep="NULL")
+
+    df_eliminados.to_csv(
+        path / f"{output_name}_eliminados.csv", index=False, na_rep="NULL"
+    )
+
+    return df_activos, df_eliminados
+
+
+def processor(df: pd.DataFrame, schema: dict, output_name: str, filter_field: str):
+    """
+    1. Filtra por homologados (unificado == True)
+    2. Agrupa por Master (Consolida registros)
+    3. Popula la estructura del Master Schema con esos valores
+    """
+    # 1. FILTRAR: Solo lo que está marcado como unificado (1 / True)
+    df_homologados = filter_by_field_value(df, filter_field, 1)
+
+    if df_homologados.empty:
+        print(f"⚠️ No hay registros con {filter_field} == True para {output_name}.")
+        return
+
+    # 2. AGRUPAR: Colapsar registros por 'master'
+    # Esto asegura que si un profesional tenía 3 registros en cleaned,
+    # ahora tengamos 1 solo con la info combinada.
+    df_agrupado = group_by_field(df_homologados, "id_master")
+
+    # 3. POPULAR MASTER SCHEMA:
+    # Tomamos la lista de campos que definimos en el Schema Master
+    cols_master = schema.get("columns")
+
+    # Reindexamos: esto hace dos cosas:
+    # - Descarta las columnas que no están en el Schema (como unificado_prof, idOrigen, etc.)
+    # - Mantiene los valores de las columnas que SI están en el Schema (nombre, apellido, cuit...)
+    df_master_final = df_agrupado.reindex(columns=cols_master)
+
+    if "id_master" in df_master_final.columns:
+        df_master_final["id_master"] = pd.to_numeric(
+            df_master_final["id_master"], errors="coerce"
+        ).astype("Int64")
+
+    # 4. EXPORTAR: Guardamos el Master Final
+    output_path = PROCESSED_DIR / f"{output_name}_master.csv"
+    df_master_final.to_csv(output_path, index=False)
+
+    print(f"🌟 Tabla Master de {output_name} creada exitosamente en /processed.")
+    print(
+        f"   -> Campos populados: {len(cols_master)} | Registros: {len(df_master_final)}"
+    )
