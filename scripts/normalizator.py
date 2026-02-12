@@ -16,8 +16,9 @@ def main():
         path=CLEANED_DIR,
         schema=PROFESIONALES_ORIGEN,
         output_name="profesionales",
-        field_to_rename="masterInst",  # Por si en el raw se llama distinto
-        new_field_name="id_master",
+        rename_map={
+            "masterInst": "id_master",  # Por si en el raw se llama distinto
+        },
     )
 
     # Procesar Obras Sociales
@@ -27,8 +28,9 @@ def main():
         path=CLEANED_DIR,
         schema=OBRAS_SOCIALES_ORIGEN,
         output_name="obras_sociales",
-        field_to_rename="masterOs",  # Por si en el raw se llama distinto
-        new_field_name="id_master",
+        rename_map={
+            "masterOs": "id_master",
+        },
     )
 
     # Procesar Especialidades
@@ -38,8 +40,10 @@ def main():
         path=CLEANED_DIR,
         schema=ESPECIALIDADES_ORIGEN,
         output_name="especialidades",
-        field_to_rename="masterEsp",  # Por si en el raw se llama distinto
-        new_field_name="id_master",
+        rename_map={
+            "masterEsp": "id_master",  # Por si en el raw se llama distinto
+            "descripcion": "nombre",
+        },
     )
 
 

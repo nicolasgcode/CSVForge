@@ -36,7 +36,7 @@ ESPECIALIDADES_ORIGEN = {
         "id",  # PK Local del registro
         "idOrigen",  # ID en el sistema fuente
         "origen",  # Código de sistema (GoRed, OS, etc.)
-        "descripcion",
+        "nombre",
         "slug_descripcion",  # Metadato para URL/SEO
         "eliminado",  # Estado lógico
         "unificado_esp",  # Flag de proceso de homologación

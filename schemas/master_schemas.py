@@ -15,7 +15,7 @@ PROFESIONALES_MASTER = {
 
 ESPECIALIDADES_MASTER = {
     "table_name": "especialidades_master",
-    "columns": ["id_master", "descripcion"],
+    "columns": ["id_master", "nombre"],
     "primary_key": "id_master",
 }
 

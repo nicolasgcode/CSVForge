@@ -88,17 +88,20 @@ def normalizator(
     path,
     schema: dict,
     output_name: str,
-    field_to_rename: str = None,
-    new_field_name: str = None,
+    rename_map: dict = None,
 ):
     df_cleaned = df.copy()
 
-    # 1. Renombrado CRÍTICO (Asegurar que masterInst pase a ser master)
-    if field_to_rename and new_field_name:
-        if field_to_rename in df_cleaned.columns:
-            df_cleaned = df_cleaned.rename(columns={field_to_rename: new_field_name})
-        else:
-            print(f"⚠️ Advertencia: No se encontró la columna {field_to_rename}")
+    if rename_map:
+        # Filtramos para no intentar renombrar columnas que no existen
+        actual_map = {
+            old: new for old, new in rename_map.items() if old in df_cleaned.columns
+        }
+
+        # Aplicamos el renombrado
+        df_cleaned = df_cleaned.rename(columns=actual_map)
+
+        print(f"✅ Columnas renombradas: {actual_map}")
 
     # 2. Columnas de auditoría
     for col in ["cambio", "createdAt"]:
@@ -106,7 +109,7 @@ def normalizator(
             df_cleaned[col] = None
 
     # 3. Aplicar Schema (Crear columnas faltantes como NaN, NO como 0 todavía)
-    target_order = schema.get("order")
+    target_order = schema.get("order", [])
     for col in target_order:
         if col not in df_cleaned.columns:
             df_cleaned[col] = None
