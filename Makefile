@@ -5,4 +5,4 @@ norm:
 proc:
 	python3 -m scripts.processor
 
-all: norm proc
+forge: norm proc

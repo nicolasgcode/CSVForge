@@ -108,7 +108,7 @@ def normalizator(
         # Aplicamos el renombrado
         df_cleaned = df_cleaned.rename(columns=actual_map)
 
-        print(f"✅ Columnas renombradas: {actual_map}")
+        print(f"Renamed columns: {actual_map}")
 
     # 2. Columnas de auditoría
     for col in ["cambio", "createdAt"]:
@@ -189,7 +189,7 @@ def processor(
     df_homologados = filter_by_field_value(df, filter_field, condition)
 
     if df_homologados.empty:
-        print(f"⚠️ No hay registros con {filter_field} == True para {output_name}.")
+        print(f"No matches for {filter_field} == {condition} for {output_name}.")
         return
 
     # 2. AGRUPAR: Colapsar registros por 'master'
@@ -215,7 +215,7 @@ def processor(
     output_path = PROCESSED_DIR / f"{output_name}_master.csv"
     df_master_final.to_csv(output_path, index=False)
 
-    print(f"🌟 Tabla Master de {output_name} creada exitosamente en /processed.")
+    print(f"Master {output_name} CSV created successfully in /processed.")
     print(
-        f"   -> Campos populados: {len(cols_master)} | Registros: {len(df_master_final)}"
+        f"   -> Populated fields: {len(cols_master)} | Records: {len(df_master_final)}"
     )
