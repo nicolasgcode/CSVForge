@@ -6,4 +6,7 @@ from utils.df_utils import (
     get_file_path,
     normalizator,
     processor,
+    profesionales_clean_path,
+    especialidades_clean_path,
+    obras_sociales_clean_path,
 )

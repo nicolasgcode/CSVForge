@@ -1,5 +1,10 @@
 import pandas as pd
-from utils.df_utils import get_file_path, processor
+from utils.df_utils import (
+    profesionales_clean_path,
+    especialidades_clean_path,
+    obras_sociales_clean_path,
+    processor,
+)
 from schemas.master_schemas import (
     PROFESIONALES_MASTER,
     ESPECIALIDADES_MASTER,
@@ -8,16 +13,10 @@ from schemas.master_schemas import (
 
 
 def main():
-    # 1. Cargar el archivo cleaned (el que ya pasó por el normalizador)
-    profesionales_clean_path = get_file_path("cleaned", "profesionales.csv")
-    especialidades_clean_path = get_file_path("cleaned", "especialidades.csv")
-    obras_sociales_clean_path = get_file_path("cleaned", "obras_sociales.csv")
-    df_pros = pd.read_csv(profesionales_clean_path)
 
-    # 2. Ejecutar el procesador
-    # Este paso: filtra -> agrupa (con prioridad GoRed) -> popula Master Schema
+    # filtra -> agrupa (con prioridad GoRed) -> popula Master Schema
     processor(
-        df=df_pros,
+        df=pd.read_csv(profesionales_clean_path),
         schema=PROFESIONALES_MASTER,
         output_name="profesionales",
         filter_field="unificado_prof",

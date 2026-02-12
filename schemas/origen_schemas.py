@@ -32,41 +32,49 @@ PROFESIONALES_ORIGEN = {
 ESPECIALIDADES_ORIGEN = {
     "table_name": "origen_especialidades",
     "order": [
-        "id_master",  # FK al Master de Especialidades
-        "id",  # PK Local del registro
-        "idOrigen",  # ID en el sistema fuente
-        "origen",  # Código de sistema (GoRed, OS, etc.)
+        "id_master",
+        "id",
+        "idOrigen",
+        "origen",
         "nombre",
-        "slug_descripcion",  # Metadato para URL/SEO
-        "eliminado",  # Estado lógico
-        "unificado_esp",  # Flag de proceso de homologación
-        "createdAt",  # Fecha de creación
-        "cambio",  # Fecha de última modificación
+        "slug_descripcion",
+        "eliminado",
+        "unificado_esp",
+        "createdAt",
+        "cambio",
     ],
-    "types": {"id_master": "int", "eliminado": "bool", "unificado_esp": "bool"},
+    "types": {
+        "id_master": "int",
+        "eliminado": "bool",
+        "unificado_esp": "bool",
+        "createdAt": "datetime",
+        "cambio": "datetime",
+    },
 }
 
 OBRAS_SOCIALES_ORIGEN = {
     "table_name": "origen_obras_sociales",
     "order": [
-        "id_master",  # FK al Master de Obras Sociales
-        "id",  # PK Local
-        "idOrigen",  # ID Sistema Fuente
-        "origen",  # Código de origen
-        "nombre",  # Nombre oficial
-        "descripcion",  # Descripción o Razón Social
-        "habilitado",  # Estado de vigencia
-        "slug_nombre",  # SEO Nombre
-        "slug_descripcion",  # SEO Descripción
-        "eliminado",  # Estado lógico
-        "unificado_os",  # Flag de proceso
-        "createdAt",  # Auditoría
-        "cambio",  # Auditoría
+        "id_master",
+        "id",
+        "idOrigen",
+        "origen",
+        "nombre",
+        "descripcion",
+        "habilitado",
+        "slug_nombre",
+        "slug_descripcion",
+        "eliminado",
+        "unificado_os",
+        "createdAt",
+        "cambio",
     ],
     "types": {
         "id_master": "int",
         "eliminado": "bool",
         "habilitado": "bool",
         "unificado_os": "bool",
+        "createdAt": "datetime",
+        "cambio": "datetime",
     },
 }

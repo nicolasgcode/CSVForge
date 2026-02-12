@@ -20,6 +20,11 @@ def get_file_path(stage: str, filename: str) -> Path:
     return get_dir(stage) / filename
 
 
+profesionales_clean_path = get_file_path("cleaned", "profesionales.csv")
+especialidades_clean_path = get_file_path("cleaned", "especialidades.csv")
+obras_sociales_clean_path = get_file_path("cleaned", "obras_sociales.csv")
+
+
 def add_columns(df: pd.DataFrame, columns: list, default_value="") -> pd.DataFrame:
     for col in columns:
         if col not in df.columns:

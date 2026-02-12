@@ -17,7 +17,7 @@ def main():
         schema=PROFESIONALES_ORIGEN,
         output_name="profesionales",
         rename_map={
-            "masterInst": "id_master",  # Por si en el raw se llama distinto
+            "masterInst": "id_master",
         },
     )
 
@@ -41,7 +41,7 @@ def main():
         schema=ESPECIALIDADES_ORIGEN,
         output_name="especialidades",
         rename_map={
-            "masterEsp": "id_master",  # Por si en el raw se llama distinto
+            "masterEsp": "id_master",
             "descripcion": "nombre",
         },
     )
