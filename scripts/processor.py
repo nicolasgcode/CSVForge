@@ -20,6 +20,7 @@ def main():
         schema=PROFESIONALES_MASTER,
         output_name="profesionales",
         filter_field="unificado_prof",
+        condition=1,
     )
 
     processor(
@@ -27,6 +28,7 @@ def main():
         schema=ESPECIALIDADES_MASTER,
         output_name="especialidades",
         filter_field="unificado_esp",
+        condition=1,
     )
 
     processor(
@@ -34,6 +36,7 @@ def main():
         schema=OBRAS_SOCIALES_MASTER,
         output_name="obras_sociales",
         filter_field="unificado_os",
+        condition=1,
     )
 
 

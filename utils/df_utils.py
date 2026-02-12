@@ -57,7 +57,9 @@ def split_by_status(df: pd.DataFrame) -> pd.DataFrame:
     return df_activos, df_eliminados
 
 
-def filter_by_field_value(df: pd.DataFrame, field: str, value) -> pd.DataFrame:
+def filter_by_field_value(
+    df: pd.DataFrame, field: str, value: int | str
+) -> pd.DataFrame:
     return df[df[field] == value].copy()
 
 
@@ -175,14 +177,16 @@ def normalizator(
     return df_activos, df_eliminados
 
 
-def processor(df: pd.DataFrame, schema: dict, output_name: str, filter_field: str):
-    """
-    1. Filtra por homologados (unificado == True)
-    2. Agrupa por Master (Consolida registros)
-    3. Popula la estructura del Master Schema con esos valores
-    """
+def processor(
+    df: pd.DataFrame,
+    schema: dict,
+    output_name: str,
+    filter_field: str,
+    condition: int | str,
+):
+
     # 1. FILTRAR: Solo lo que está marcado como unificado (1 / True)
-    df_homologados = filter_by_field_value(df, filter_field, 1)
+    df_homologados = filter_by_field_value(df, filter_field, condition)
 
     if df_homologados.empty:
         print(f"⚠️ No hay registros con {filter_field} == True para {output_name}.")

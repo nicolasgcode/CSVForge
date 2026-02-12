@@ -11,6 +11,7 @@ from schemas.origen_schemas import (
 def main():
     # Procesar Profesionales
     df_pros = pd.read_csv(get_file_path("raw", "profesionales_importados.csv"))
+
     normalizator(
         df=df_pros,
         path=CLEANED_DIR,
